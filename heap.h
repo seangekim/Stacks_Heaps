@@ -2,6 +2,8 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <vector>
+using namespace std;
 
 template <typename T, typename PComparator = std::less<T> >
 class Heap
@@ -58,37 +60,63 @@ public:
    * 
    */
   size_t size() const;
+  
+  void heapify(int idx);
+
 
 private:
   /// Add whatever helper functions and data members you need below
-
-
-
+  vector<T> data;
+  int aryn;
+  PComparator comparator;
 
 };
 
 // Add implementation of member functions here
 
+// constructor for heap
+template <typename T, typename PComparator>
+Heap<T,PComparator>::Heap(int m, PComparator c){
+    comparator = c;
+    aryn = m;
+}
+
+// deconstructor for heap
+template <typename T, typename PComparator>
+Heap<T,PComparator>::~Heap(){
+  while(!empty()){
+    data.pop_back();
+  }
+
+}
+
+// pushes item back into heapf
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::push(const T& item){
+  data.push_back(item);
+  int idx = data.size()-1;
+  while(comparator(data[idx], data[(idx-1)/aryn])){
+    swap(data[idx],data[(idx-1)/aryn]);
+    idx = (idx-1)/aryn;
+  }
+  return;
+}
+
+
 
 // We will start top() for you to handle the case of 
 // calling top on an empty heap
 template <typename T, typename PComparator>
-T const & Heap<T,PComparator>::top() const
+T const & Heap<T,PComparator>::top() const // FINISHED FUNCTION
 {
   // Here we use exceptions to handle the case of trying
   // to access the top element of an empty heap
   if(empty()){
-    // ================================
-    // throw the appropriate exception
-    // ================================
-
-
+    throw underflow_error("No elements");
   }
   // If we get here we know the heap has at least 1 item
   // Add code to return the top element
-
-
-
+  return data[0];
 }
 
 
@@ -101,15 +129,54 @@ void Heap<T,PComparator>::pop()
     // ================================
     // throw the appropriate exception
     // ================================
-
-
+    throw underflow_error("No elements to pop");
   }
+  T temp = data[data.size()-1];
+  data[0] = temp;
+  data.pop_back();
+  heapify(0);
+
+
+}
+
+template <typename T, typename PComparator>
+void Heap<T,PComparator>::heapify(int idx){
+  // if statement to check if leaf node
+  if((unsigned)idx*aryn+1 >= data.size()){
+    return;
+  }
+  // index of child with greatest value, initalized with first child
+  int value_child = aryn*idx+1;
+  // loop to go through all siblings of value_child and find the most valuable node
+  int temp = value_child;
+  for(int i=1; i<aryn; i++){
+    if((unsigned)temp + i < data.size()){
+      // compares value child with all other sibligs
+      if(comparator(data[temp+i], data[value_child])){
+        value_child = temp + i;
+        }
+    }
+  }
+  if(comparator(data[value_child], data[idx])){
+    swap(data[value_child], data[idx]);
+    heapify(value_child);
+  }
+}
 
 
 
+
+// returns bool if empty
+template <typename T, typename PComparator>
+bool Heap<T,PComparator>::empty() const{
+  return data.empty();
+}
+
+template <typename T, typename PComparator>
+size_t Heap<T,PComparator>::size() const{
+  return data.size();
 }
 
 
 
 #endif
-

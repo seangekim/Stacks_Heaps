@@ -81,12 +81,33 @@ int main(int argc, char* argv[])
     // -----------------------------------------------
     // Feel free to update any code below this point
     // -----------------------------------------------
-    Node* head = readList(argv[1]);
-    cout << "Original list: ";
-    print(head);
+    Node* head1 = readList(argv[1]);
+    Node* head2 = readList(argv[1]);
+    
 
     // Test out your linked list code
+    Node* smaller = new Node(0, nullptr);
+    Node* larger = new Node(0, nullptr);
 
+    llpivot(head1,smaller,larger,10);
+    cout << "Pivot test" << endl;
+    cout << "Original list: ";
+    print(head1);
+    cout << endl;
+    cout << "Smaller list: ";
+    print(smaller);
+    cout << "Larger list: ";
+    print(larger);
+    cout << boolalpha << "Original List is null: " << (head1 == nullptr) << endl;
+
+    // cout << "Filter test" << endl;
+    // Comp pred;
+    // cout << "Original list: ";
+    // print(head2);
+    // cout << endl;
+    // llfilter(head2, pred)
+    // cout << "List after: " << endl;
+    // print(head2);
 
 
     

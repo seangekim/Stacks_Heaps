@@ -83,6 +83,28 @@ Node* llfilter(Node* head, Comp pred)
     //*********************************************
     // Provide your implementation below
     //*********************************************
+    
+    //check if first node is nullptr
+    if(head == nullptr){
+        return nullptr;
+    }
+    // check if only one element is in list 
+    
+ 
+
+    // check if node value is equal to pred
+    else if(pred(head->val)){
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        return llfilter(head,pred);
+
+    }
+    // else, recursively run llfilter with next node
+    else{
+        head->next = llfilter(head->next,pred);
+        return head;
+    }
 
 
 }
